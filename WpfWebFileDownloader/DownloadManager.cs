@@ -31,9 +31,14 @@ namespace WpfWebFileDownloader
             return;
         }
 
-        public async Task CancelDownload()
+        public void GiveFileFinalName()
         {
-            client.Pause();
+            string fullFinalName = Path.Combine(SavePath, FileName);
+            if (File.Exists(fullFinalName))
+            {
+                File.Delete(fullFinalName);
+            }
+            File.Move(_tempFilePath, fullFinalName);
         }
     }
 }

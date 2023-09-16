@@ -76,10 +76,17 @@
                 />
 
             <Button
-                x:Name="Cancel_Button"
+                x:Name="Stop_Button"
+                Grid.Column="1"
+                Content="Stop"
+                Margin="2" Click="Stop_Button_Click"
+                />
+
+            <Button
+                x:Name="Resume_Button"
                 Grid.Column="2"
-                Content="Cancel"
-                Margin="2" Click="Cancel_Button_Click"
+                Content="Resume"
+                Margin="2" Click="Resume_Button_Click"
                 />
         </UniformGrid>
 

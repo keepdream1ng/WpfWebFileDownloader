@@ -32,9 +32,11 @@ namespace WpfWebFileDownloader
 
         private void InitialSetUp()
         {
-            //Download_Button.IsEnabled = false;
+            Download_Button.IsEnabled = false;
             Link_TextBox.Text = "https://download.sprutcam.com/links/SprutCAM_X.zip";
             SavePath_TextBox.Text = "D:\\test";
+            Resume_Button.Visibility = Visibility.Collapsed;
+            Stop_Button.Visibility = Visibility.Collapsed;
         }
 
         private void OnProgressChanged(object sender, AltoHttp.ProgressChangedEventArgs e)
@@ -44,8 +46,12 @@ namespace WpfWebFileDownloader
 
         private void OnDownloadCompleted(object? sender, EventArgs e)
         {
-            Download_Button.IsEnabled = true;
-            MessageBox.Show("File Download Complete!");
+            Dispatcher.Invoke(new Action(() =>
+            {
+                Download_Button.IsEnabled = true;
+                downloadManager.GiveFileFinalName();
+                MessageBox.Show("File Download Complete!");
+            }));
         }
 
         private void Link_TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -55,32 +61,35 @@ namespace WpfWebFileDownloader
 
         private void SavePath_TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            downloadManager.SavePath = SavePath_TextBox.Text;
+            if (String.IsNullOrEmpty(SavePath_TextBox.Text))
+                return;
+            if (Download_Button.IsEnabled = FolderChecker.IsDirectoryWritable(SavePath_TextBox.Text)) 
+                downloadManager.SavePath = SavePath_TextBox.Text;
         }
 
         private void Download_Button_Click(object sender, RoutedEventArgs e)
         {
             Download_Button.IsEnabled = false;
-            ResetProgressBar();
+            Stop_Button.Visibility = Visibility.Visible;
+            Resume_Button.Visibility = Visibility.Collapsed;
+            Download_ProgressBar.Value = 0;
             downloadManager.DownloadFile();
             downloadManager.client.DownloadCompleted += OnDownloadCompleted;
             downloadManager.client.ProgressChanged += OnProgressChanged;
         }
 
-        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
+        private void Stop_Button_Click(object sender, RoutedEventArgs e)
         {
-            downloadManager.CancelDownload();
-            ResetProgressBar();
+            downloadManager.client.Pause();
+            Resume_Button.Visibility = Visibility.Visible;
             Download_Button.IsEnabled = true;
-        }
-
-        private void ResetProgressBar()
-        {
-            Download_ProgressBar.Value = 0;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            if (downloadManager.client == null)
+                return;
+
             if ((downloadManager.client.State == AltoHttp.Status.Downloading)
                 ||
                 (downloadManager.client.State == AltoHttp.Status.SendingRequest))
@@ -92,6 +101,12 @@ namespace WpfWebFileDownloader
             {
                 downloadManager.client.StopReset();
             }
+        }
+
+        private void Resume_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Download_Button.IsEnabled = false;
+            downloadManager.client.Resume();
         }
     }
 }
