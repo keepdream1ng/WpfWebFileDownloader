@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfWebFileDownloader"
         mc:Ignorable="d"
         FontSize="18"
-        Title="WebFileDownloader" Height="170" Width="650">
+        Title="WebFileDownloader" Height="170" Width="650" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -36,21 +36,21 @@
             Grid.Column="2"
             Grid.Row="1"
             Grid.ColumnSpan="3"
-            Margin="2"
+            Margin="2" TextChanged="Link_TextBox_TextChanged"
             />
 
         <TextBlock
             Grid.Column="1"
             Grid.Row="2"
-            Text="Path to safe the file:"
+            Text="Path to save the file:"
             />
 
         <TextBox 
-            x:Name="SafePath_TextBox"
+            x:Name="SavePath_TextBox"
             Grid.Column="2"
             Grid.Row="2"
             Grid.ColumnSpan="2"
-            Margin="2"
+            Margin="2" TextChanged="SavePath_TextBox_TextChanged"
             />
 
         <Button
@@ -72,14 +72,14 @@
                 x:Name="Download_Button"
                 Grid.Column="0"
                 Content="Dowload"
-                Margin="2"
+                Margin="2" Click="Download_Button_Click"
                 />
 
             <Button
                 x:Name="Cancel_Button"
                 Grid.Column="2"
                 Content="Cancel"
-                Margin="2"
+                Margin="2" Click="Cancel_Button_Click"
                 />
         </UniformGrid>
 
