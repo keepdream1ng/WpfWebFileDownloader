@@ -23,6 +23,13 @@ namespace WpfWebFileDownloader
         public MainWindow()
         {
             InitializeComponent();
+            InitialSetUp();
+        }
+
+        private void InitialSetUp()
+        {
+            Download_Button.IsEnabled = false;
+            Link_TextBox.Text = "https://download.sprutcam.com/links/SprutCAM_X.zip";
         }
     }
 }

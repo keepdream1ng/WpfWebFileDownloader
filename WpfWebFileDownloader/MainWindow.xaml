@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfWebFileDownloader"
         mc:Ignorable="d"
         FontSize="18"
-        Title="WebFileDownloader" Height="170" Width="600">
+        Title="WebFileDownloader" Height="170" Width="650">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
