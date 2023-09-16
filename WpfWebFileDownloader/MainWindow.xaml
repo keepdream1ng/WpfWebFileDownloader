@@ -58,7 +58,7 @@
             Grid.Column="4"
             Grid.Row="2"
             Content="Browse"
-            Margin="2"
+            Margin="2" Click="BrowseFolder_Button_Click"
             />
 
         <UniformGrid

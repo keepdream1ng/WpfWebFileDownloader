@@ -46,10 +46,10 @@ namespace WpfWebFileDownloader
 
         private void OnDownloadCompleted(object? sender, EventArgs e)
         {
+            // needs to be called from UI thread.
             Dispatcher.Invoke(new Action(() =>
             {
                 Download_Button.IsEnabled = true;
-                downloadManager.GiveFileFinalName();
                 MessageBox.Show("File Download Complete!");
             }));
         }
@@ -63,7 +63,7 @@ namespace WpfWebFileDownloader
         {
             if (String.IsNullOrEmpty(SavePath_TextBox.Text))
                 return;
-            if (Download_Button.IsEnabled = FolderChecker.IsDirectoryWritable(SavePath_TextBox.Text)) 
+            if (Download_Button.IsEnabled = FolderChecker.IsDirectoryWritable(SavePath_TextBox.Text))
                 downloadManager.SavePath = SavePath_TextBox.Text;
         }
 
@@ -87,7 +87,9 @@ namespace WpfWebFileDownloader
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (downloadManager.client == null)
+            if ((downloadManager.client == null)
+                ||
+                (downloadManager.client.State == AltoHttp.Status.Completed))
                 return;
 
             if ((downloadManager.client.State == AltoHttp.Status.Downloading)
@@ -107,6 +109,17 @@ namespace WpfWebFileDownloader
         {
             Download_Button.IsEnabled = false;
             downloadManager.client.Resume();
+        }
+
+        private void BrowseFolder_Button_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    SavePath_TextBox.Text = dialog.SelectedPath;
+                }
+            }
         }
     }
 }

@@ -15,8 +15,6 @@ namespace WpfWebFileDownloader
         public string DownloadLink { get; set; }
         public string FileName { get { return Path.GetFileName(DownloadLink); } }
         public string SavePath { get; set; }
-
-        private string _tempFilePath;
         public HttpDownloader client { get; private set; }
 
         public void DownloadFile()
@@ -25,20 +23,9 @@ namespace WpfWebFileDownloader
             {
                 client.StopReset();
             }
-            _tempFilePath = Path.Combine(SavePath, Guid.NewGuid().ToString());
-            client = new HttpDownloader(DownloadLink, _tempFilePath);
+            client = new HttpDownloader(DownloadLink, Path.Combine(SavePath, FileName));
             client.Start();
             return;
-        }
-
-        public void GiveFileFinalName()
-        {
-            string fullFinalName = Path.Combine(SavePath, FileName);
-            if (File.Exists(fullFinalName))
-            {
-                File.Delete(fullFinalName);
-            }
-            File.Move(_tempFilePath, fullFinalName);
         }
     }
 }
