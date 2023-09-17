@@ -50,6 +50,7 @@ namespace WpfWebFileDownloader
             Dispatcher.Invoke(new Action(() =>
             {
                 Download_Button.IsEnabled = true;
+                InstallDataWriter.Write(downloadManager.SavePath);
                 MessageBox.Show("File Download Complete!");
             }));
         }
