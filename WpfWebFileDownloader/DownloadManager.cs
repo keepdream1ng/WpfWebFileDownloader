@@ -19,7 +19,9 @@ namespace WpfWebFileDownloader
 
         public void DownloadFile()
         {
-            if (client != null)
+            if ((client != null)
+                &&
+                (client.State != Status.Completed))
             {
                 client.StopReset();
             }

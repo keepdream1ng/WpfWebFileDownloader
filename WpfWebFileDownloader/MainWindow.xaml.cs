@@ -35,7 +35,6 @@ namespace WpfWebFileDownloader
             downloadManager = new DownloadManager();
             Download_Button.IsEnabled = false;
             Link_TextBox.Text = "https://download.sprutcam.com/links/SprutCAM_X.zip";
-            SavePath_TextBox.Text = "D:\\test";
             Resume_Button.Visibility = Visibility.Collapsed;
             Stop_Button.Visibility = Visibility.Collapsed;
         }
@@ -53,6 +52,8 @@ namespace WpfWebFileDownloader
                 Download_Button.IsEnabled = true;
                 InstallDataWriter.Write(downloadManager.SavePath);
                 MessageBox.Show("File Download Complete!");
+                Resume_Button.Visibility = Visibility.Collapsed;
+                Stop_Button.Visibility = Visibility.Collapsed;
             }));
         }
 
@@ -90,6 +91,7 @@ namespace WpfWebFileDownloader
         {
             Download_Button.IsEnabled = false;
             downloadManager.client.Resume();
+            Resume_Button.Visibility = Visibility.Collapsed;
         }
 
         private void BrowseFolder_Button_Click(object sender, RoutedEventArgs e)
