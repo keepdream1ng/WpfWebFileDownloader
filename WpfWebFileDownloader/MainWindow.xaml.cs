@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,18 +21,18 @@ namespace WpfWebFileDownloader
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private DownloadManager downloadManager;
         public MainWindow()
         {
             InitializeComponent();
-            downloadManager = new DownloadManager();
             InitialSetUp();
         }
 
         private void InitialSetUp()
         {
+            downloadManager = new DownloadManager();
             Download_Button.IsEnabled = false;
             Link_TextBox.Text = "https://download.sprutcam.com/links/SprutCAM_X.zip";
             SavePath_TextBox.Text = "D:\\test";
@@ -85,6 +86,22 @@ namespace WpfWebFileDownloader
             Resume_Button.Visibility = Visibility.Visible;
             Download_Button.IsEnabled = true;
         }
+        private void Resume_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Download_Button.IsEnabled = false;
+            downloadManager.client.Resume();
+        }
+
+        private void BrowseFolder_Button_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    SavePath_TextBox.Text = dialog.SelectedPath;
+                }
+            }
+        }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
@@ -106,21 +123,5 @@ namespace WpfWebFileDownloader
             }
         }
 
-        private void Resume_Button_Click(object sender, RoutedEventArgs e)
-        {
-            Download_Button.IsEnabled = false;
-            downloadManager.client.Resume();
-        }
-
-        private void BrowseFolder_Button_Click(object sender, RoutedEventArgs e)
-        {
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    SavePath_TextBox.Text = dialog.SelectedPath;
-                }
-            }
-        }
     }
 }
